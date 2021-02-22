@@ -1,8 +1,11 @@
 package com.opsnow.terminology.controller;
 
+import com.opsnow.terminology.config.DBConfig;
 import com.opsnow.terminology.model.Parameter;
 import com.opsnow.terminology.service.Facade;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,15 +15,20 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 @RestController
-@RequiredArgsConstructor
 public class TerminologyController {
 
-    private final Facade facade;
+    private final Facade facade = new Facade();
+
+    @Autowired
+    private ApplicationContext springContext;
 
     @PostMapping ("/test")
     public ResponseEntity test(@RequestBody Parameter parameter){
 
         System.out.println("METHOD START - test in TerminologyController!");
+
+        DBConfig dbConfig = springContext.getBean(DBConfig.class);
+        System.out.println("url???/???" + dbConfig.getUrl());
 
         System.out.println("parameter:" + parameter);
 

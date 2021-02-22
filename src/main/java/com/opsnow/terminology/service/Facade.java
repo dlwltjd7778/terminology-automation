@@ -18,13 +18,10 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
 public class Facade {
 
-    @NonNull
-    private final TerminologyService terminologyService;
-    @NonNull
-    private final GoogleAPIService googleAPI;
+    private TerminologyService terminologyService = new TerminologyService();
+    private GoogleAPIService googleAPI = new GoogleAPIService();
 
 
     public Map<String,Object> facade(Parameter parameter){

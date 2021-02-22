@@ -3,10 +3,9 @@ package com.opsnow.terminology.service;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.opsnow.terminology.config.DBConfig;
+import com.opsnow.terminology.repository.TerminologyRepositoryJava;
 import com.opsnow.terminology.model.Terminology;
-import com.opsnow.terminology.repository.TerminologyRepository;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class TerminologyService {
 
-    @NonNull
-    private final TerminologyRepository terminologyDAO;
+//    @NonNull
+//    private final TerminologyRepository terminologyDAO;
 
     // 2. 데이터를 파싱하는 부분 ( 컬럼명과 시트데이터 가져오는 부분 )
     public JsonArray parseData(String data) {
@@ -84,7 +82,15 @@ public class TerminologyService {
     }
 
     public void saveData(List<Terminology> list){
-        terminologyDAO.saveAll(list);
+//        terminologyDAO.saveAll(list);
+        String tableName = "000_temp_dictionary";
+        TerminologyRepositoryJava db = new TerminologyRepositoryJava();
+
+
+
+        db.getConn();
+        db.deleteAll(tableName);
+        db.insertAll(list);
         System.out.println("DB data 삽입 완료");
     }
 }

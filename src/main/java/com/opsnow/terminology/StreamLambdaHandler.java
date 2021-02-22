@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.opsnow.terminology.config.DBConfig;
 import com.opsnow.terminology.model.Parameter;
 import com.opsnow.terminology.service.Facade;
 import lombok.NonNull;
@@ -25,16 +26,20 @@ import com.amazonaws.serverless.proxy.model.AwsProxyResponse;
 import com.amazonaws.serverless.proxy.spring.SpringBootLambdaContainerHandler;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Import;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@RequiredArgsConstructor
-public class StreamLambdaHandler implements RequestStreamHandler {
+public class StreamLambdaHandler implements RequestStreamHandler, ApplicationContextAware {
 
-    @NonNull
-    private final Facade facade;
+    private final Facade facade = new Facade();
     private static Logger logger = LoggerFactory.getLogger(StreamLambdaHandler.class);
+
+    @Autowired
+    DBConfig dbConfig;
 
     public static SpringBootLambdaContainerHandler<AwsProxyRequest, AwsProxyResponse> handler;
 
@@ -72,6 +77,9 @@ public class StreamLambdaHandler implements RequestStreamHandler {
             }
         }
 
+//        logger.log("-----springContext===> {}" + springContext );
+//        DBConfig dbConfig = springContext.getBean(DBConfig.class);
+        System.out.println("url???/???" + dbConfig.getUrl());
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -97,4 +105,8 @@ public class StreamLambdaHandler implements RequestStreamHandler {
     }
 
 
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+       // this.springContext = applicationContext;
+    }
 }
