@@ -6,11 +6,7 @@ import com.opsnow.terminology.model.OauthParameter;
 import com.opsnow.terminology.model.SheetParameter;
 import com.opsnow.terminology.model.Parameter;
 import com.opsnow.terminology.model.Terminology;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -20,13 +16,13 @@ import java.util.Map;
 @Service
 public class Facade {
 
-    private TerminologyService terminologyService = new TerminologyService();
-    private GoogleAPIService googleAPI = new GoogleAPIService();
-
+    @Autowired
+    private GoogleAPIService googleAPI;
+    @Autowired
+    private TerminologyService terminologyService;
 
     public Map<String,Object> facade(Parameter parameter){
 
-        System.out.println();
         System.out.println("===========facade============");
 
         Map<String,Object> result = new HashMap<>();

@@ -1,47 +1,46 @@
 package com.opsnow.terminology;
 
-import java.io.*;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Map;
-
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.opsnow.terminology.config.DBConfig;
-import com.opsnow.terminology.model.Parameter;
-import com.opsnow.terminology.service.Facade;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.amazonaws.serverless.exceptions.ContainerInitializationException;
 import com.amazonaws.serverless.proxy.model.AwsProxyRequest;
 import com.amazonaws.serverless.proxy.model.AwsProxyResponse;
 import com.amazonaws.serverless.proxy.spring.SpringBootLambdaContainerHandler;
 import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
-import org.springframework.beans.BeansException;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.opsnow.terminology.model.Parameter;
+import com.opsnow.terminology.service.Facade;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Import;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-public class StreamLambdaHandler implements RequestStreamHandler, ApplicationContextAware {
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
-    private final Facade facade = new Facade();
+public class StreamLambdaHandler implements RequestStreamHandler {
+
+    //private final Facade facade = new Facade();
     private static Logger logger = LoggerFactory.getLogger(StreamLambdaHandler.class);
 
-    @Autowired
-    DBConfig dbConfig;
+//    @Autowired
+//    DBConfig dbConfig;
 
     public static SpringBootLambdaContainerHandler<AwsProxyRequest, AwsProxyResponse> handler;
+  //  private static final ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationContext.class);
+
+    static AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(
+            StreamLambdaHandler.class.getPackage().getName());
+
+    public StreamLambdaHandler() {
+        ctx.getAutowireCapableBeanFactory().autowireBean(this);
+    }
+
+    @Autowired
+    private Facade facade;
 
     static {
         try {
@@ -68,6 +67,7 @@ public class StreamLambdaHandler implements RequestStreamHandler, ApplicationCon
 
        // handler.proxyStream(inputStream, outputStream, context);
 
+        // inputStream to String
         StringBuilder textBuilder = new StringBuilder();
         try (Reader reader = new BufferedReader(new InputStreamReader
                 (inputStream, Charset.forName(StandardCharsets.UTF_8.name())))) {
@@ -77,9 +77,9 @@ public class StreamLambdaHandler implements RequestStreamHandler, ApplicationCon
             }
         }
 
-//        logger.log("-----springContext===> {}" + springContext );
+       logger.log("-----springContext===> {}" + context );
 //        DBConfig dbConfig = springContext.getBean(DBConfig.class);
-        System.out.println("url???/???" + dbConfig.getUrl());
+//        System.out.println("url???/???" + dbConfig.getUrl());
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -105,8 +105,8 @@ public class StreamLambdaHandler implements RequestStreamHandler, ApplicationCon
     }
 
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-       // this.springContext = applicationContext;
-    }
+
+
+
+
 }

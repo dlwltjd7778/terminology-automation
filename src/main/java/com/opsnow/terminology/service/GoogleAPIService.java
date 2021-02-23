@@ -2,8 +2,8 @@ package com.opsnow.terminology.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.opsnow.terminology.model.SheetParameter;
 import com.opsnow.terminology.model.OauthParameter;
+import com.opsnow.terminology.model.SheetParameter;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;

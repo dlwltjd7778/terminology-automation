@@ -3,9 +3,8 @@ package com.opsnow.terminology.service;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.opsnow.terminology.config.DBConfig;
-import com.opsnow.terminology.repository.TerminologyRepositoryJava;
 import com.opsnow.terminology.model.Terminology;
+import com.opsnow.terminology.repository.TerminologyRepositoryJava;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +14,12 @@ import java.util.List;
 @Service
 public class TerminologyService {
 
-//    @NonNull
-//    private final TerminologyRepository terminologyDAO;
+//    @Autowired
+//    private TerminologyRepository terminologyDAO;
+
+
+    @Autowired
+    private TerminologyRepositoryJava terminologyRepositoryJava;
 
     // 2. 데이터를 파싱하는 부분 ( 컬럼명과 시트데이터 가져오는 부분 )
     public JsonArray parseData(String data) {
@@ -28,7 +31,6 @@ public class TerminologyService {
 
         return jsonArray;
     }
-
 
     // 3. 가져온 데이터를 VO에 매핑하기위한 작업들
     public List<Terminology> mappingData(JsonArray jsonArray) {
@@ -81,16 +83,12 @@ public class TerminologyService {
         return resultList;
     }
 
-    public void saveData(List<Terminology> list){
+    public void saveData(List<Terminology> list) throws Exception{
 //        terminologyDAO.saveAll(list);
         String tableName = "000_temp_dictionary";
-        TerminologyRepositoryJava db = new TerminologyRepositoryJava();
-
-
-
-        db.getConn();
-        db.deleteAll(tableName);
-        db.insertAll(list);
+        terminologyRepositoryJava.getConn();
+        terminologyRepositoryJava.truncate(tableName);
+        terminologyRepositoryJava.insertAll(list);
         System.out.println("DB data 삽입 완료");
     }
 }

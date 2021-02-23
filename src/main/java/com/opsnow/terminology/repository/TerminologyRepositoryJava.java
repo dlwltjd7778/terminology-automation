@@ -2,17 +2,19 @@ package com.opsnow.terminology.repository;
 
 import com.opsnow.terminology.model.Terminology;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Service;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
-@Component
+@Service
+@PropertySource("classpath:application.properties") // 프로퍼티 파일 경로 지정
 public class TerminologyRepositoryJava {
     private Connection conn = null;
-//    private static String URL = "jdbc:mariadb://seoul-dev-lightsaver-alarm-db01.czmesa8znr6d.ap-northeast-2.rds.amazonaws.com:3306/db";
-//    private static String USERNAME = "admin";
-//    private static String PASSWORD = "qptmvlswltjd!";
 
     @Value("${spring.datasource.driverClassName}")
     private String DRIVERCLASSNAME;
@@ -28,15 +30,15 @@ public class TerminologyRepositoryJava {
 
 //    @Autowired
 //    private DBConfig dbConfig;
-//
+
 //    private String DRIVERCLASSNAME = dbConfig.getDriverClassName();
 //    private String URL = dbConfig.getUrl();
 //    private String USERNAME = dbConfig.getUsername();
 //    private String PASSWORD = dbConfig.getPassword();
 
+    // 커넥션 얻기
     public Connection getConn() {
         try {
-            System.out.println("db드라이버?????======" + DRIVERCLASSNAME);
             Class.forName(DRIVERCLASSNAME);
             conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
         } catch (Exception e){
@@ -45,10 +47,10 @@ public class TerminologyRepositoryJava {
         return conn;
     }
 
-    public void deleteAll(String table){
+    // truncate
+    public void truncate(String table){
         PreparedStatement pstmt = null;
         String sql = "TRUNCATE TABLE 000_temp_dictionary";
-        System.out.println("table명 : " + table);
         try{
             pstmt = conn.prepareStatement(sql);
             pstmt.executeUpdate();
