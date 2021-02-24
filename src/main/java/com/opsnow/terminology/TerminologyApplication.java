@@ -9,11 +9,8 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 @SpringBootApplication
 public class TerminologyApplication extends SpringBootServletInitializer {
 
-    private static Logger logger = LoggerFactory.getLogger(TerminologyApplication.class);
-
     public static void main(String[] args) {
         SpringApplication.run(TerminologyApplication.class, args);
-        System.out.println("build success");
     }
 
 }

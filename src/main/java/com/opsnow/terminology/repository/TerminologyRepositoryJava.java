@@ -50,7 +50,7 @@ public class TerminologyRepositoryJava {
     // truncate
     public void truncate(String table){
         PreparedStatement pstmt = null;
-        String sql = "TRUNCATE TABLE 000_temp_dictionary";
+        String sql = "TRUNCATE TABLE " + table;
         try{
             pstmt = conn.prepareStatement(sql);
             pstmt.executeUpdate();
@@ -60,7 +60,8 @@ public class TerminologyRepositoryJava {
         }
     }
 
-    public int insertAll(List<Terminology> list){
+    // insert
+    public void insertAll(List<Terminology> list){
         PreparedStatement pstmt = null;
         String sql = "INSERT INTO 000_temp_dictionary(MSG_ID, CONTS_TYPE_CD, LANG_MSG_ID_NO, MSG_SBST_ENG, MSG_SBST_KOR, MSG_SBST_CHN, MSG_SBST_JPN, ANG_CODE, FM_CODE) "
                 + "VALUES(?,?,?,?,?,?,?,?,?)";
@@ -84,8 +85,6 @@ public class TerminologyRepositoryJava {
 
         } catch (Exception e){
             e.printStackTrace();
-        } finally {
-            return 0;
         }
     }
 }

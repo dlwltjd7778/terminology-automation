@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opsnow.terminology.model.OauthParameter;
 import com.opsnow.terminology.model.SheetParameter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
@@ -14,17 +15,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class GoogleAPIService {
 
     // 리프레쉬 토큰으로 토큰 얻기
     public String getAccessTokenByRefreshToken(OauthParameter parameterVO) throws IOException {
 
-        System.out.println("METHOD START - getAccessTokenByRefreshToken() in GoogleAPI class");
+        log.info("start {}",Thread.currentThread().getStackTrace()[1].getMethodName());
 
-        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-        factory.setConnectTimeout(5000);
-        RestTemplate restTemplate = new RestTemplate(factory);
-
+//        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+//        factory.setConnectTimeout(5000);
+//        RestTemplate restTemplate = new RestTemplate(factory);
+        RestTemplate restTemplate = new RestTemplate();
 
         String url = "https://oauth2.googleapis.com/token";
 
@@ -55,19 +57,18 @@ public class GoogleAPIService {
         try {
             resMap = mapper.readValue(response.getBody(), Map.class);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            log.error("",e);
         }
         String access_token = resMap.get("access_token");
-        System.out.println("나는 토큰이다!! " + access_token);
 
         // check response
         if (response.getStatusCode() == HttpStatus.OK) {
-            System.out.println("Request Successful (getAccessTokenByRefreshToken())");
+            log.info("Request Successful {}",Thread.currentThread().getStackTrace()[1].getMethodName());
         } else {
-            System.out.println("Request Failed (getAccessTokenByRefreshToken())");
+            log.info("Request Failed {}",Thread.currentThread().getStackTrace()[1].getMethodName());
         }
 
-        System.out.println("METHOD END - getAccessTokenByRefreshToken() in GoogleAPI class");
+        log.info("end {}",Thread.currentThread().getStackTrace()[1].getMethodName());
 
         return access_token;
 
@@ -78,7 +79,7 @@ public class GoogleAPIService {
     // 구글 시트에서 토큰으로 데이터 받아오기
     public String getSheetDataByToken(SheetParameter sheetParameter){
 
-        System.out.println("METHOD START - getSheetDataByToken() in GoogleAPI class");
+        log.info("start {}",Thread.currentThread().getStackTrace()[1].getMethodName());
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -96,16 +97,16 @@ public class GoogleAPIService {
             ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
             // check response
             if (response.getStatusCode() == HttpStatus.OK) {
-                System.out.println("Request Successful (getSheetData)");
+                log.info("Request Successful {}",Thread.currentThread().getStackTrace()[1].getMethodName());
             } else {
-                System.out.println("Request Failed (getSheetData)");
+                log.info("Request Failed {}",Thread.currentThread().getStackTrace()[1].getMethodName());
             }
             return response.getBody();
         } catch (Exception e){
-            System.err.println("ERROR - getSheetDataByToken() in GoogleAPI class");
+            log.error("",e);
             return null;
         } finally {
-            System.out.println("METHOD END - getSheetDataByToken() in GoogleAPI class");
+            log.info("end {}",Thread.currentThread().getStackTrace()[1].getMethodName());
         }
 
     }

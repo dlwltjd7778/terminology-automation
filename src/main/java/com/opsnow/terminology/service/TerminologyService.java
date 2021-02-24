@@ -4,7 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.opsnow.terminology.model.Terminology;
-import com.opsnow.terminology.repository.TerminologyRepositoryJava;
+import com.opsnow.terminology.repository.TerminologyRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,28 +13,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class TerminologyService {
 
-//    @Autowired
-//    private TerminologyRepository terminologyDAO;
-
-
     @Autowired
-    private TerminologyRepositoryJava terminologyRepositoryJava;
+    private TerminologyRepository terminologyDAO;
+//    @Autowired
+//    private TerminologyRepositoryJava terminologyRepositoryJava;
 
     // 2. 데이터를 파싱하는 부분 ( 컬럼명과 시트데이터 가져오는 부분 )
     public JsonArray parseData(String data) {
+        log.info("start {}",Thread.currentThread().getStackTrace()[1].getMethodName());
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonData = (JsonObject) jsonParser.parse(data);
 
         // 전체에서 values 라는 JSONArray 가져옴
         JsonArray jsonArray = jsonData.getAsJsonArray("values");
 
+        log.info("end {}",Thread.currentThread().getStackTrace()[1].getMethodName());
         return jsonArray;
     }
 
     // 3. 가져온 데이터를 VO에 매핑하기위한 작업들
     public List<Terminology> mappingData(JsonArray jsonArray) {
+        log.info("start {}",Thread.currentThread().getStackTrace()[1].getMethodName());
+
         List<Terminology> resultList = new ArrayList<>();
 
         // 0번 행에 적힌 컬럼명을 통해 열 번호 가져옴
@@ -74,21 +78,31 @@ public class TerminologyService {
                 vo.setMSG_SBST_CHN(temp.get(num_MSG_SBST_CHN).getAsString());
                 vo.setMSG_SBST_JPN(temp.get(num_MSG_SBST_JPN).getAsString());
             } catch (Exception e){
-                System.err.println(i + "번째 행 에러!!");
-                //e.printStackTrace();
-                break;
+                log.warn("{} 행 데이터 에러로 인해 삽입 안됨",i);
+                continue;
             }
             resultList.add(vo);
         }
+        log.info("end {}",Thread.currentThread().getStackTrace()[1].getMethodName());
         return resultList;
     }
 
-    public void saveData(List<Terminology> list) throws Exception{
-//        terminologyDAO.saveAll(list);
-        String tableName = "000_temp_dictionary";
-        terminologyRepositoryJava.getConn();
-        terminologyRepositoryJava.truncate(tableName);
-        terminologyRepositoryJava.insertAll(list);
-        System.out.println("DB data 삽입 완료");
+    public void saveData(List<Terminology> list) {
+        log.info("start {}",Thread.currentThread().getStackTrace()[1].getMethodName());
+        // JPA ver
+        try {
+            terminologyDAO.saveAll(list);
+            log.info("{} 개의 데이터 삽입", list.size());
+        } catch (Exception e){
+            log.error("",e);
+        }
+
+        terminologyDAO.procedure_test();
+        // java ver
+//        String tableName = "000_temp_dictionary";
+//        terminologyRepositoryJava.getConn();
+//        terminologyRepositoryJava.truncate(tableName);
+//        terminologyRepositoryJava.insertAll(list);
+        log.info("end {}",Thread.currentThread().getStackTrace()[1].getMethodName());
     }
 }

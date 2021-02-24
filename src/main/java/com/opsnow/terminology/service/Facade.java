@@ -1,11 +1,11 @@
 package com.opsnow.terminology.service;
 
 import com.google.gson.JsonArray;
-
 import com.opsnow.terminology.model.OauthParameter;
-import com.opsnow.terminology.model.SheetParameter;
 import com.opsnow.terminology.model.Parameter;
+import com.opsnow.terminology.model.SheetParameter;
 import com.opsnow.terminology.model.Terminology;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class Facade {
 
     @Autowired
@@ -21,9 +22,11 @@ public class Facade {
     @Autowired
     private TerminologyService terminologyService;
 
+
+
     public Map<String,Object> facade(Parameter parameter){
 
-        System.out.println("===========facade============");
+        log.info("{} start",Thread.currentThread().getStackTrace()[1].getMethodName());
 
         Map<String,Object> result = new HashMap<>();
         int code = 200;
@@ -57,35 +60,38 @@ public class Facade {
 
                             // 4. 데이터 DB에 저장
                             terminologyService.saveData(dataList);
+
                         } catch (Exception e){
                             code = 503;
                             msg = "데이터 매핑 or db 저장 에러";
-                            e.printStackTrace();
+                            log.error("{}",msg,e);
                         }
                     } catch (Exception e){
                         code = 502;
                         msg = "데이터 파싱 에러";
-                        e.printStackTrace();
+                        log.error("{}",msg,e);
                     }
                 } catch (Exception e){
                     code = 501;
                     msg = "데이터 받아오기 에러";
-                    e.printStackTrace();
+                    log.error("{}",msg,e);
                 }
             } catch (Exception e){
                 code = 401;
                 msg = "OAuth 인증 에러";
-                e.printStackTrace();
+                log.error("{}",msg,e);
             }
         } catch (Exception e){
             code = 400;
             msg = "파라미터 에러";
-            e.printStackTrace();
+            log.error("{}",msg,e);
         } finally {
-            System.out.println("Facade msg : " + msg);
+            log.info(msg);
+            log.info("{} end",Thread.currentThread().getStackTrace()[1].getMethodName());
             result.put("code",code);
             result.put("msg",msg);
             return result;
         }
+
     }
 }
