@@ -7,6 +7,7 @@ import com.opsnow.terminology.model.SheetParameter;
 import com.opsnow.terminology.model.Terminology;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -22,12 +23,17 @@ public class Facade {
     @Autowired
     private TerminologyService terminologyService;
 
-
+    @Value("${spring.profiles.active}")
+    private String profile;
+    @Value("${spring.datasource.password}")
+    private String pwd;
 
     public Map<String,Object> facade(Parameter parameter){
 
+
         log.info("{} start",Thread.currentThread().getStackTrace()[1].getMethodName());
 
+        log.info("profile : {}, pwd : {}",profile,pwd);
         Map<String,Object> result = new HashMap<>();
         int code = 200;
         String msg = "success";

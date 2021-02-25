@@ -7,6 +7,7 @@ import com.opsnow.terminology.model.Terminology;
 import com.opsnow.terminology.repository.TerminologyRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Service
 @Slf4j
+@PropertySource("classpath:application-${spring.profiles.active}.properties") // 프로퍼티 파일 경로 지정
 public class TerminologyService {
 
     @Autowired
@@ -78,7 +80,7 @@ public class TerminologyService {
                 vo.setMSG_SBST_CHN(temp.get(num_MSG_SBST_CHN).getAsString());
                 vo.setMSG_SBST_JPN(temp.get(num_MSG_SBST_JPN).getAsString());
             } catch (Exception e){
-                log.warn("{} 행 데이터 에러로 인해 삽입 안됨",i);
+                log.warn("{} 행 데이터 에러로 인해 데이터 리스트에 삽입 안됨",i);
                 continue;
             }
             resultList.add(vo);
@@ -89,20 +91,27 @@ public class TerminologyService {
 
     public void saveData(List<Terminology> list) {
         log.info("start {}",Thread.currentThread().getStackTrace()[1].getMethodName());
+
         // JPA ver
         try {
             terminologyDAO.saveAll(list);
             log.info("{} 개의 데이터 삽입", list.size());
+
+            log.info("프로시저 실행");
+            terminologyDAO.procedure_test();
+            log.info("프로시저 실행 완료");
+
+            log.info("end {}",Thread.currentThread().getStackTrace()[1].getMethodName());
         } catch (Exception e){
-            log.error("",e);
+            log.error("{} 실행 실패",Thread.currentThread().getStackTrace()[1].getMethodName(),e);
         }
 
-        terminologyDAO.procedure_test();
+
         // java ver
 //        String tableName = "000_temp_dictionary";
 //        terminologyRepositoryJava.getConn();
 //        terminologyRepositoryJava.truncate(tableName);
 //        terminologyRepositoryJava.insertAll(list);
-        log.info("end {}",Thread.currentThread().getStackTrace()[1].getMethodName());
+
     }
 }
