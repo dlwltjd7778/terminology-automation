@@ -1,5 +1,7 @@
 package com.opsnow.terminology.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -7,6 +9,9 @@ import com.google.gson.JsonParser;
 import com.opsnow.terminology.model.Parameter;
 import com.opsnow.terminology.service.Facade;
 import lombok.extern.slf4j.Slf4j;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +33,21 @@ public class TerminologyController {
 
         log.info("{} start",Thread.currentThread().getStackTrace()[1].getMethodName());
 
-        Map<String,Object> result = facade.facade(parameter);
+        String resultStr = null;
+        JSONObject result = null;
+        JSONParser jsonParser = new JSONParser();
+
+        Map<String,Object> resultMap = facade.facade(parameter);
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            resultStr = objectMapper.writeValueAsString(resultMap);
+            result = (JSONObject) jsonParser.parse(resultStr);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         log.info("{} end",Thread.currentThread().getStackTrace()[1].getMethodName());
 
@@ -36,20 +55,5 @@ public class TerminologyController {
         return new ResponseEntity(result,HttpStatus.OK);
     }
 
-    @PostMapping ("/testjson")
-    public JsonObject testjson(@RequestBody Parameter parameter){
-
-        Gson gson = new Gson();
-        JsonParser jsonParser = new JsonParser();
-
-        // output ( map to json )
-        Map<String,Object> resultMap = facade.facade(parameter);
-        String resultStr = gson.toJson(resultMap);
-        System.out.println("map to string >>> " + resultStr);
-        JsonObject result = (JsonObject) jsonParser.parse(resultStr);
-
-
-        return result;
-    }
 
 }

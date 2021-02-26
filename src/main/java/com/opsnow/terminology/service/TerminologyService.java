@@ -93,19 +93,14 @@ public class TerminologyService {
         log.info("start {}",Thread.currentThread().getStackTrace()[1].getMethodName());
 
         // JPA ver
-        try {
-            terminologyDAO.saveAll(list);
-            log.info("{} 개의 데이터 삽입", list.size());
+        terminologyDAO.saveAll(list);
+        log.info("{} 개의 데이터 삽입", list.size());
 
-            log.info("프로시저 실행");
-            terminologyDAO.procedure_test();
-            log.info("프로시저 실행 완료");
+        log.info("프로시저 실행");
+        terminologyDAO.procedure_test();
+        log.info("프로시저 실행 완료");
 
-            log.info("end {}",Thread.currentThread().getStackTrace()[1].getMethodName());
-        } catch (Exception e){
-            log.error("{} 실행 실패",Thread.currentThread().getStackTrace()[1].getMethodName(),e);
-        }
-
+        log.info("end {}",Thread.currentThread().getStackTrace()[1].getMethodName());
 
         // java ver
 //        String tableName = "000_temp_dictionary";
