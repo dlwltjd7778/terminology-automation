@@ -23,17 +23,11 @@ public class Facade {
     @Autowired
     private TerminologyService terminologyService;
 
-    @Value("${spring.profiles.active}")
-    private String profile;
-    @Value("${spring.datasource.password}")
-    private String pwd;
-
     public Map<String,Object> facade(Parameter parameter){
-
 
         log.info("{} start",Thread.currentThread().getStackTrace()[1].getMethodName());
 
-        log.info("profile : {}, pwd : {}",profile,pwd);
+
         Map<String,Object> result = new HashMap<>();
         int code = 200;
         String msg = "success";
@@ -43,7 +37,6 @@ public class Facade {
         String data;
         JsonArray jsonArray;
         List<Terminology> dataList;
-
 
 
         try{

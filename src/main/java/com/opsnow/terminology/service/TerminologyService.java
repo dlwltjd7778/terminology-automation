@@ -15,17 +15,17 @@ import java.util.List;
 
 @Service
 @Slf4j
-@PropertySource("classpath:application-${spring.profiles.active}.properties") // 프로퍼티 파일 경로 지정
+//@PropertySource("classpath:application-${spring.profiles.active}.properties") // 프로퍼티 파일 경로 지정
+@PropertySource("classpath:application-loc.properties")
 public class TerminologyService {
 
     @Autowired
-    private TerminologyRepository terminologyDAO;
-//    @Autowired
-//    private TerminologyRepositoryJava terminologyRepositoryJava;
+    private TerminologyRepository terminologyRepository;
 
     // 2. 데이터를 파싱하는 부분 ( 컬럼명과 시트데이터 가져오는 부분 )
     public JsonArray parseData(String data) {
         log.info("start {}",Thread.currentThread().getStackTrace()[1].getMethodName());
+
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonData = (JsonObject) jsonParser.parse(data);
 
@@ -36,7 +36,12 @@ public class TerminologyService {
         return jsonArray;
     }
 
-    // 3. 가져온 데이터를 VO에 매핑하기위한 작업들
+     /*
+         method :       mappingData
+         Parameter :    JsonArray
+         Return :       List<Terminology>
+         desc :         3. 가져온 데이터를 VO에 매핑하기위한 작업들
+     */
     public List<Terminology> mappingData(JsonArray jsonArray) {
         log.info("start {}",Thread.currentThread().getStackTrace()[1].getMethodName());
 
@@ -48,20 +53,29 @@ public class TerminologyService {
 
         for(int i=0;i<keyArr.size();i++){
             String key = keyArr.get(i).getAsString();
-            if("MSG_ID".equals(key)){
-                num_MSG_ID=i;
-            } else if("CONTS_TYPE_CD".equals(key)){
-                num_CONTS_TYPE_CD = i;
-            } else if("LANG_MSG_ID_NO".equals(key)){
-                num_LANG_MSG_ID_NO = i;
-            } else if("MSG_SBST(ENG)\nAS-IS".equals(key)){
-                num_MSG_SBST_ENG = i;
-            } else if("MSG_SBST(KOR)\nAS-IS".equals(key)) {
-                num_MSG_SBST_KOR = i;
-            } else if("MSG_SBST(CHN)\nAS-IS".equals(key)){
-                num_MSG_SBST_CHN = i;
-            } else if("MSG_SBST(JPN)\nAS-IS".equals(key)){
-                num_MSG_SBST_JPN = i;
+
+            switch (key){
+                case "MSG_ID":
+                    num_MSG_ID = i;
+                    break;
+                case "CONTS_TYPE_CD":
+                    num_CONTS_TYPE_CD = i;
+                    break;
+                case "LANG_MSG_ID_NO":
+                    num_LANG_MSG_ID_NO = i;
+                    break;
+                case "MSG_SBST(ENG)\nAS-IS":
+                    num_MSG_SBST_ENG = i;
+                    break;
+                case "MSG_SBST(KOR)\nAS-IS":
+                    num_MSG_SBST_KOR = i;
+                    break;
+                case "MSG_SBST(CHN)\nAS-IS":
+                    num_MSG_SBST_CHN = i;
+                    break;
+                case "MSG_SBST(JPN)\nAS-IS":
+                    num_MSG_SBST_JPN = i;
+                    break;
             }
         }
 
@@ -85,28 +99,29 @@ public class TerminologyService {
             }
             resultList.add(vo);
         }
+
         log.info("end {}",Thread.currentThread().getStackTrace()[1].getMethodName());
         return resultList;
     }
 
+    /*
+        method :       saveData
+        Parameter :    List<Terminology>
+        Return :       void
+        desc :         4. 데이터 DB에 저장
+    */
     public void saveData(List<Terminology> list) {
         log.info("start {}",Thread.currentThread().getStackTrace()[1].getMethodName());
 
         // JPA ver
-        terminologyDAO.saveAll(list);
+        terminologyRepository.saveAll(list);
         log.info("{} 개의 데이터 삽입", list.size());
 
         log.info("프로시저 실행");
-        terminologyDAO.procedure_test();
+        terminologyRepository.procedure_test();
         log.info("프로시저 실행 완료");
 
         log.info("end {}",Thread.currentThread().getStackTrace()[1].getMethodName());
-
-        // java ver
-//        String tableName = "000_temp_dictionary";
-//        terminologyRepositoryJava.getConn();
-//        terminologyRepositoryJava.truncate(tableName);
-//        terminologyRepositoryJava.insertAll(list);
 
     }
 }

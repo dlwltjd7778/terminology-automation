@@ -28,7 +28,7 @@ public class LambdaHandler implements RequestHandler<Map, JSONObject> {
     }
 
     @Autowired
-    Facade facade;
+    Facade facadeService;
 
     // handler
     public JSONObject handleRequest(Map input, Context context) {
@@ -44,17 +44,18 @@ public class LambdaHandler implements RequestHandler<Map, JSONObject> {
         String inputString = gson.toJson(input);
         Parameter parameter = gson.fromJson(inputString, Parameter.class);
 
-        // output ( map to json )
-        Map<String,Object> resultMap = facade.facade(parameter);
-        ObjectMapper objectMapper = new ObjectMapper();
+        // 로직 실행
+        Map<String,Object> resultMap = facadeService.facade(parameter);
 
+        // output ( map to json )
+        ObjectMapper objectMapper = new ObjectMapper();
         try {
             resultStr = objectMapper.writeValueAsString(resultMap);
             result = (JSONObject) jsonParser.parse(resultStr);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            log.error("",e);
         } catch (ParseException e) {
-            e.printStackTrace();
+            log.error("",e);
         }
 
         log.info("end {}",Thread.currentThread().getStackTrace()[1].getMethodName());

@@ -18,22 +18,30 @@ import java.util.Map;
 @Slf4j
 public class GoogleAPIService {
 
-    // 리프레쉬 토큰으로 토큰 얻기
-    public String getAccessTokenByRefreshToken(OauthParameter parameterVO) throws IOException {
+    static final String OAUTH_REQ_URL = "https://oauth2.googleapis.com/token";
+    static final String SHEET_REQ_URL = "https://sheets.googleapis.com/v4/spreadsheets/";
+    RestTemplate restTemplate;
+    HttpHeaders headers;
+    HttpEntity entity;
+    ResponseEntity<String> response;
+
+
+    /*
+         method :       getAccessTokenByRefreshToken
+         Parameter :    OauthParameter
+         Return :       String (access_token)
+         desc :         리프레쉬 토큰으로 토큰 얻기
+     */
+    public String getAccessTokenByRefreshToken(OauthParameter oauthParameter) throws JsonProcessingException {
 
         log.info("start {}",Thread.currentThread().getStackTrace()[1].getMethodName());
 
-//        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-//        factory.setConnectTimeout(5000);
-//        RestTemplate restTemplate = new RestTemplate(factory);
-        RestTemplate restTemplate = new RestTemplate();
+        restTemplate = new RestTemplate();
 
-        String url = "https://oauth2.googleapis.com/token";
-
-        String client_id = parameterVO.getClient_id();
-        String client_secret = parameterVO.getClient_secret();
-        String refresh_token = parameterVO.getRefresh_token();
-        String grant_type = parameterVO.getGrant_type();
+        String client_id = oauthParameter.getClient_id();
+        String client_secret = oauthParameter.getClient_secret();
+        String refresh_token = oauthParameter.getRefresh_token();
+        String grant_type = oauthParameter.getGrant_type();
 
         // body 작성
         Map<String,String> reqBody = new HashMap<>();
@@ -42,73 +50,53 @@ public class GoogleAPIService {
         reqBody.put("refresh_token", refresh_token);
         reqBody.put("grant_type",grant_type);
 
-        // Header 작성
-        HttpHeaders headers = new HttpHeaders();
-
-        // http entity에 header, body 담아줌
-        HttpEntity entity = new HttpEntity<>(reqBody, headers);
+        // http entity에 body 담아줌
+        entity = new HttpEntity<>(reqBody);
 
         // api 호출 및 값 받아오기
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+        response = restTemplate.exchange(OAUTH_REQ_URL, HttpMethod.POST, entity, String.class);
 
         // response String to Map
         ObjectMapper mapper = new ObjectMapper();
-        Map<String,String> resMap = null;
-        try {
-            resMap = mapper.readValue(response.getBody(), Map.class);
-        } catch (JsonProcessingException e) {
-            log.error("",e);
-        }
+
+        // Response 를 맵에 매핑
+        Map<String,String> resMap =  mapper.readValue(response.getBody(), Map.class); // throws JsonProcessingException
+
+        // 매핑된 값에서 access_token 값만 가져옴
         String access_token = resMap.get("access_token");
 
-        // check response
-        if (response.getStatusCode() == HttpStatus.OK) {
-            log.info("Request Successful {}",Thread.currentThread().getStackTrace()[1].getMethodName());
-        } else {
-            log.info("Request Failed {}",Thread.currentThread().getStackTrace()[1].getMethodName());
-        }
-
         log.info("end {}",Thread.currentThread().getStackTrace()[1].getMethodName());
-
         return access_token;
-
     }
 
 
-
-    // 구글 시트에서 토큰으로 데이터 받아오기
-    public String getSheetDataByToken(SheetParameter sheetParameter){
+    /*
+         method :       getSheetDataByToken
+         Parameter :    SheetParameter
+         Return :       String (엑셀 시트 데이터)
+         desc :         구글 시트에서 토큰으로 데이터 받아오기
+     */
+    public String getSheetDataByToken(SheetParameter sheetParameter) {
 
         log.info("start {}",Thread.currentThread().getStackTrace()[1].getMethodName());
 
-        RestTemplate restTemplate = new RestTemplate();
+        restTemplate = new RestTemplate();
 
-        String url = "https://sheets.googleapis.com/v4/spreadsheets/"+ sheetParameter.getSheet_id() +"/values/" + sheetParameter.getSheet_name();
+        String url = SHEET_REQ_URL + sheetParameter.getSheet_id() +"/values/" + sheetParameter.getSheet_name();
 
         // Header 작성
-        HttpHeaders headers = new HttpHeaders();
+        headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + sheetParameter.getAccess_token());
 
         // http entity에 header 담아줌
-        HttpEntity entity = new HttpEntity<>(headers);
+        entity = new HttpEntity<>(headers);
 
         // api 호출 및 값 받아오기
-        try {
-            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-            // check response
-            if (response.getStatusCode() == HttpStatus.OK) {
-                log.info("Request Successful {}",Thread.currentThread().getStackTrace()[1].getMethodName());
-            } else {
-                log.info("Request Failed {}",Thread.currentThread().getStackTrace()[1].getMethodName());
-            }
-            return response.getBody();
-        } catch (Exception e){
-            log.error("",e);
-            return null;
-        } finally {
-            log.info("end {}",Thread.currentThread().getStackTrace()[1].getMethodName());
-        }
+        response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
 
+        log.info("end {}",Thread.currentThread().getStackTrace()[1].getMethodName());
+
+        return response.getBody();
     }
 
 }
