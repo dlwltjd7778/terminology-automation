@@ -15,8 +15,8 @@ import java.util.List;
 
 @Service
 @Slf4j
-//@PropertySource("classpath:application-${spring.profiles.active}.properties") // 프로퍼티 파일 경로 지정
-@PropertySource("classpath:application-loc.properties")
+@PropertySource("classpath:application-${spring.profiles.active}.properties") // 프로퍼티 파일 경로 지정
+//@PropertySource("classpath:application-loc.properties")
 public class TerminologyService {
 
     @Autowired
@@ -110,16 +110,14 @@ public class TerminologyService {
         Return :       void
         desc :         4. 데이터 DB에 저장
     */
-    public void saveData(List<Terminology> list) {
+    public void saveData(List<Terminology> list) throws Exception {
         log.info("start {}",Thread.currentThread().getStackTrace()[1].getMethodName());
 
-        // JPA ver
+        terminologyRepository.truncateTerminologyTable();
+        log.info("truncate table success");
+
         terminologyRepository.saveAll(list);
         log.info("{} 개의 데이터 삽입", list.size());
-
-        log.info("프로시저 실행");
-        terminologyRepository.procedure_test();
-        log.info("프로시저 실행 완료");
 
         log.info("end {}",Thread.currentThread().getStackTrace()[1].getMethodName());
 

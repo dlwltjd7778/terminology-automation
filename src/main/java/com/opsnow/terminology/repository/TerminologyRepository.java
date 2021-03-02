@@ -14,10 +14,5 @@ public interface TerminologyRepository extends JpaRepository<Terminology,String>
 
     @Procedure
     void truncateTerminologyTable();
-/*
-create procedure truncateTerminologyTable()
-BEGIN
-    truncate table "000_temp_dictionary";
-end;
- */
+
 }
