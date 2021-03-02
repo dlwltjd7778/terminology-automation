@@ -23,6 +23,12 @@ public class Facade {
     @Autowired
     private TerminologyService terminologyService;
 
+    /*
+        method :       facade
+        Parameter :    Parameter ( OauthParameter, SheetParameter 포함하는 model )
+        Return :       Map<String,Object>
+        desc :         코드와 메세지를 리턴하는 Facade
+    */
     public Map<String,Object> facade(Parameter parameter){
 
         log.info("{} start",Thread.currentThread().getStackTrace()[1].getMethodName());
