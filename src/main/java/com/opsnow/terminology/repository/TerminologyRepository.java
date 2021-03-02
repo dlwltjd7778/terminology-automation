@@ -10,9 +10,12 @@ import org.springframework.stereotype.Repository;
 public interface TerminologyRepository extends JpaRepository<Terminology,String> {
 
     @Procedure
-    void procedure_test();
+    void MAKE_DIC();
 
-    @Procedure
+    @Query(
+            value="TRUNCATE table 000_temp_dictionary",
+            nativeQuery = true
+    )
     void truncateTerminologyTable();
 
 }
