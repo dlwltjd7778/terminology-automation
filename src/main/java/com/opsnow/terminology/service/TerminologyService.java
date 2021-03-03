@@ -22,7 +22,12 @@ public class TerminologyService {
     @Autowired
     private TerminologyRepository terminologyRepository;
 
-    // 2. 데이터를 파싱하는 부분 ( 컬럼명과 시트데이터 가져오는 부분 )
+     /*
+         method :       parseData
+         Parameter :    String
+         Return :       JsonArray
+         desc :         2. 데이터를 파싱하는 부분 ( 컬럼명과 시트데이터 가져오는 부 )
+     */
     public JsonArray parseData(String data) {
         log.info("start {}",Thread.currentThread().getStackTrace()[1].getMethodName());
 
@@ -118,6 +123,9 @@ public class TerminologyService {
 
         terminologyRepository.saveAll(list);
         log.info("{} 개의 데이터 삽입", list.size());
+
+        terminologyRepository.MAKE_DIC();
+        log.info("MAKE_DIC 프로시저 실행 완료 ");
 
         log.info("end {}",Thread.currentThread().getStackTrace()[1].getMethodName());
 

@@ -19,7 +19,17 @@ import java.util.Map;
 @Slf4j
 public class LambdaHandler implements RequestHandler<Map, JSONObject> {
 
-    // bean 주입
+    /*
+        - AnnotationConfigApplicationContext : @Configuration 어노테이션이 붙은 클래스를 설정 정보로 사용한다
+                                               파라미터에 패키지를 넣으면 그 패키지를 스캔해준다.
+        - LambdaHandler Class 가 실행될 때 bean 을 수동으로 주입
+        - AutowireCapableBeanFactory : 의존 관계를 만들어주면서 bean 을 주입해준다.
+
+        Spring에서는 클래스 경로 스캔을 사용하여 빈을 자동 감지하고 자동 구성하는 데 사용되는 @Component 클래스를 만든다.
+        그런 다음 컨테이너는 빈을 생성하고 주입한다.
+        AWS Lambda의 경우 'Lambda 함수 핸들러 객체'가 이미 만들어져 버린다.
+        AWS에서 생성한 핸들러 객체는 해당 객체에 대한 종속성 주입 을 허용하도록 초기화되는 동안 ApplicationContext에 의해 빈으로 연결된다.
+     */
     static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
             LambdaHandler.class.getPackage().getName());
 
