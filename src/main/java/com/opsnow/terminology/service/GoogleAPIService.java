@@ -1,19 +1,18 @@
 package com.opsnow.terminology.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opsnow.terminology.model.OauthParameter;
 import com.opsnow.terminology.model.SheetParameter;
 import com.opsnow.terminology.util.MyException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.http.*;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +24,6 @@ public class GoogleAPIService {
     String OAUTH_REQ_URL;
     @Value("${SHEET_REQ_URL}")
     String SHEET_REQ_URL;
-
 
     /*
          method :       getAccessTokenByRefreshToken
@@ -72,9 +70,6 @@ public class GoogleAPIService {
         } catch (Exception e){
             throw new MyException("Google Oauth API Error",401,e.initCause(e.getCause()));
         }
-
-
-
     }
 
 
@@ -111,7 +106,5 @@ public class GoogleAPIService {
         } catch (Exception e){
             throw new MyException("Google Sheet API Error",402,e.initCause(e.getCause()));
         }
-
     }
-
 }

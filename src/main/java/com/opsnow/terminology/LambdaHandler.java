@@ -2,7 +2,6 @@ package com.opsnow.terminology;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.opsnow.terminology.model.Parameter;
@@ -10,7 +9,6 @@ import com.opsnow.terminology.service.Facade;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -64,8 +62,6 @@ public class LambdaHandler implements RequestHandler<Map, JSONObject> {
 
         } catch (Exception e) {
             log.error("",e);
-            result.put("code",400);
-            result.put("msg", "Parameter Error");
         }
 
         log.info("end {}",Thread.currentThread().getStackTrace()[1].getMethodName());

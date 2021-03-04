@@ -11,8 +11,6 @@ public class MyException extends Exception{
         super(msg,throwable);
         error_code = code;
     }
-
-
 }
 
 

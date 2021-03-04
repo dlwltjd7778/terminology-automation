@@ -17,7 +17,7 @@ import java.util.List;
 @Service
 @Slf4j
 @PropertySource("classpath:application-${spring.profiles.active}.properties") // 프로퍼티 파일 경로 지정
-//@PropertySource("classpath:application-dqa.properties")
+//@PropertySource("classpath:application-loc.properties")
 public class TerminologyService {
 
     @Autowired
@@ -46,7 +46,6 @@ public class TerminologyService {
         } catch (Exception e){
             throw new MyException("ParseData Error",501,e.initCause(e.getCause()));
         }
-
     }
 
      /*
@@ -120,8 +119,6 @@ public class TerminologyService {
         } catch (Exception e){
             throw new MyException("MappingData Error",502,e.initCause(e.getCause()));
         }
-
-
     }
 
     /*
@@ -149,8 +146,5 @@ public class TerminologyService {
         } catch (Exception e){
             throw new MyException("saveData Error",503,e.initCause(e.getCause()));
         }
-
-
-
     }
 }
