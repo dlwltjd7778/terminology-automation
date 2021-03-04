@@ -54,6 +54,9 @@ public class Facade {
             // 4. 데이터 DB에 저장
             terminologyService.saveData(dataList);
 
+            // 5. 프로시저 실행
+            terminologyService.callProcedure();
+
             result.put("code", 200);
             result.put("msg", "success");
 

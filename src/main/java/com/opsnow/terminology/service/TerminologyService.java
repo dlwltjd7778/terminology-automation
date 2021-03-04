@@ -138,13 +138,33 @@ public class TerminologyService {
             terminologyRepository.saveAll(list);
             log.info("{} 개의 데이터 삽입", list.size());
 
+            log.info("end {}",Thread.currentThread().getStackTrace()[1].getMethodName());
+
+        } catch (Exception  e){
+            e.printStackTrace();
+            throw new MyException("saveData Error",503,e.getCause());
+        }
+    }
+
+    /*
+        method :       callProcedure
+        Parameter :    x
+        Return :       void
+        desc :         5. 프로시저 실행
+    */
+    public void callProcedure() throws MyException {
+        log.info("start {}",Thread.currentThread().getStackTrace()[1].getMethodName());
+
+        try{
+
             terminologyRepository.MAKE_DIC();
             log.info("MAKE_DIC 프로시저 실행 완료 ");
 
             log.info("end {}",Thread.currentThread().getStackTrace()[1].getMethodName());
 
-        } catch (Exception e){
-            throw new MyException("saveData Error",503,e.initCause(e.getCause()));
+        } catch (Exception  e){
+            throw new MyException("callProcedure Error",504,e.getCause());
         }
+
     }
 }
