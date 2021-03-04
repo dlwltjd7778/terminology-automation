@@ -47,25 +47,25 @@ public class LambdaHandler implements RequestHandler<Map, JSONObject> {
 
         Gson gson = new Gson();
         JSONParser jsonParser = new JSONParser();
-        String resultStr = null;
         JSONObject result = null;
 
-        // input ( map to object )
-        String inputString = gson.toJson(input);
-        Parameter parameter = gson.fromJson(inputString, Parameter.class);
-
-        // 로직 실행
-        Map<String,Object> resultMap = facadeService.facade(parameter);
-
-        // output ( map to json )
-        ObjectMapper objectMapper = new ObjectMapper();
         try {
-            resultStr = objectMapper.writeValueAsString(resultMap);
+            // input ( map to object )
+            String inputString = gson.toJson(input);
+            Parameter parameter = gson.fromJson(inputString, Parameter.class);
+
+            // 로직 실행
+            Map<String,Object> resultMap = facadeService.facade(parameter);
+
+            // output ( map to json )
+            ObjectMapper objectMapper = new ObjectMapper();
+            String resultStr = objectMapper.writeValueAsString(resultMap);
             result = (JSONObject) jsonParser.parse(resultStr);
-        } catch (JsonProcessingException e) {
+
+        } catch (Exception e) {
             log.error("",e);
-        } catch (ParseException e) {
-            log.error("",e);
+            result.put("code",400);
+            result.put("msg", "Parameter Error");
         }
 
         log.info("end {}",Thread.currentThread().getStackTrace()[1].getMethodName());

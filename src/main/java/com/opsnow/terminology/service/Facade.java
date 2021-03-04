@@ -5,6 +5,7 @@ import com.opsnow.terminology.model.OauthParameter;
 import com.opsnow.terminology.model.Parameter;
 import com.opsnow.terminology.model.SheetParameter;
 import com.opsnow.terminology.model.Terminology;
+import com.opsnow.terminology.util.MyException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,74 +30,41 @@ public class Facade {
         Return :       Map<String,Object>
         desc :         코드와 메세지를 리턴하는 Facade
     */
-    public Map<String,Object> facade(Parameter parameter){
+    public Map<String, Object> facade(Parameter parameter) {
 
-        log.info("{} start",Thread.currentThread().getStackTrace()[1].getMethodName());
-
-
-        Map<String,Object> result = new HashMap<>();
-        int code = 200;
-        String msg = "success";
-
-        OauthParameter oauthParameter;
-        SheetParameter sheetParameter;
-        String data;
-        JsonArray jsonArray;
-        List<Terminology> dataList;
-
+        log.info("{} start", Thread.currentThread().getStackTrace()[1].getMethodName());
+        Map<String, Object> result = new HashMap<>();
 
         try{
-            oauthParameter = parameter.getOauth_parameter();
-            sheetParameter = parameter.getSheet_parameter();
-            try{
-                String access_token = googleAPI.getAccessTokenByRefreshToken(oauthParameter);
-                try{
-                    // 1. 데이터를 받아오는 부분
-                    sheetParameter.setAccess_token(access_token);
-                    data = googleAPI.getSheetDataByToken(sheetParameter);
+            OauthParameter oauthParameter = parameter.getOauth_parameter();
+            SheetParameter sheetParameter = parameter.getSheet_parameter();
 
-                    try {
-                        // 2. 데이터를 파싱하는 부분 ( 컬럼명과 시트데이터 가져오는 부분 )
-                        jsonArray = terminologyService.parseData(data);
+            String access_token = googleAPI.getAccessTokenByRefreshToken(oauthParameter);
 
-                        try{
-                            // 3. 가져온 데이터를 VO에 매핑하기 위한 작업들
-                            dataList = terminologyService.mappingData(jsonArray);
+            // 1. 데이터를 받아오는 부분
+            sheetParameter.setAccess_token(access_token);
+            String data = googleAPI.getSheetDataByToken(sheetParameter);
 
-                            // 4. 데이터 DB에 저장
-                            terminologyService.saveData(dataList);
+            // 2. 데이터를 파싱하는 부분 ( 컬럼명과 시트데이터 가져오는 부분 )
+            JsonArray jsonArray = terminologyService.parseData(data);
 
-                        } catch (Exception e){
-                            code = 503;
-                            msg = "데이터 매핑 or db 저장 에러";
-                            log.error("{}",msg,e);
-                        }
-                    } catch (Exception e){
-                        code = 502;
-                        msg = "데이터 파싱 에러";
-                        log.error("{}",msg,e);
-                    }
-                } catch (Exception e){
-                    code = 501;
-                    msg = "데이터 받아오기 에러";
-                    log.error("{}",msg,e);
-                }
-            } catch (Exception e){
-                code = 401;
-                msg = "OAuth 인증 에러";
-                log.error("{}",msg,e);
-            }
-        } catch (Exception e){
-            code = 400;
-            msg = "파라미터 에러";
-            log.error("{}",msg,e);
-        } finally {
-            log.info(msg);
-            log.info("{} end",Thread.currentThread().getStackTrace()[1].getMethodName());
-            result.put("code",code);
-            result.put("msg",msg);
-            return result;
+            // 3. 가져온 데이터를 VO에 매핑하기 위한 작업들
+            List<Terminology> dataList = terminologyService.mappingData(jsonArray);
+
+            // 4. 데이터 DB에 저장
+            terminologyService.saveData(dataList);
+
+            result.put("code", 200);
+            result.put("msg", "success");
+
+            log.info("{} end", Thread.currentThread().getStackTrace()[1].getMethodName());
+
+        } catch (MyException e){
+            log.info("",e);
+            result.put("code",e.getError_code());
+            result.put("msg",e.getMessage());
         }
 
+        return result;
     }
 }

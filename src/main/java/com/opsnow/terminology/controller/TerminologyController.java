@@ -30,23 +30,20 @@ public class TerminologyController {
 
     @PostMapping ("/test")
     public ResponseEntity test(@RequestBody Parameter parameter){
-
         log.info("{} start",Thread.currentThread().getStackTrace()[1].getMethodName());
 
-        String resultStr = null;
         JSONObject result = null;
         JSONParser jsonParser = new JSONParser();
 
-        Map<String,Object> resultMap = facade.facade(parameter);
-        ObjectMapper objectMapper = new ObjectMapper();
-
         try {
-            resultStr = objectMapper.writeValueAsString(resultMap);
+
+            Map<String,Object> resultMap = facade.facade(parameter);
+            ObjectMapper objectMapper = new ObjectMapper();
+            String resultStr = objectMapper.writeValueAsString(resultMap);
             result = (JSONObject) jsonParser.parse(resultStr);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
+
+        } catch (Exception e) {
+            log.error("",e);
         }
 
         log.info("{} end",Thread.currentThread().getStackTrace()[1].getMethodName());
