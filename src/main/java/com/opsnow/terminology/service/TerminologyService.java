@@ -44,7 +44,7 @@ public class TerminologyService {
             return jsonArray;
 
         } catch (Exception e){
-            throw new MyException("ParseData Error",501,e.initCause(e.getCause()));
+            throw new MyException("Data Parsing Error",501,e.initCause(e.getCause()));
         }
     }
 
@@ -117,7 +117,7 @@ public class TerminologyService {
             return resultList;
 
         } catch (Exception e){
-            throw new MyException("MappingData Error",502,e.initCause(e.getCause()));
+            throw new MyException("Data Mapping Error",502,e.initCause(e.getCause()));
         }
     }
 
@@ -142,7 +142,7 @@ public class TerminologyService {
 
         } catch (Exception  e){
             e.printStackTrace();
-            throw new MyException("saveData Error",503,e.getCause());
+            throw new MyException("Save Data Error",503,e.getCause());
         }
     }
 
@@ -163,7 +163,7 @@ public class TerminologyService {
             log.info("end {}",Thread.currentThread().getStackTrace()[1].getMethodName());
 
         } catch (Exception  e){
-            throw new MyException("callProcedure Error",504,e.getCause());
+            throw new MyException("Procedure Call Error",504,e.getCause());
         }
 
     }
