@@ -65,6 +65,11 @@ public class LambdaHandler implements RequestHandler<Map, JSONObject> {
         }
 
         log.info("end {}",Thread.currentThread().getStackTrace()[1].getMethodName());
+
+        if(result==null){
+            result = new JSONObject();
+            result.put("message","error");
+        }
         return result;
     }
 }
