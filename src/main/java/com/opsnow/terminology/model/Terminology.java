@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.domain.Persistable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,7 +13,7 @@ import javax.persistence.Id;
 @Setter
 @ToString
 @Entity(name="000_temp_dictionary")
-public class Terminology {
+public class Terminology implements Persistable<String> {
 
     @Id
     @NonNull
@@ -33,4 +34,13 @@ public class Terminology {
     private String ANG_CODE;
     private String FM_CODE;
 
+    @Override
+    public String getId() {
+        return MSG_ID;
+    }
+
+    @Override
+    public boolean isNew() {
+        return true;
+    }
 }
