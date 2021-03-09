@@ -3,6 +3,7 @@ package com.opsnow.terminology.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opsnow.terminology.model.OauthParameter;
 import com.opsnow.terminology.model.SheetParameter;
+import com.opsnow.terminology.util.ExceptionCode;
 import com.opsnow.terminology.util.MyException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -68,7 +69,7 @@ public class GoogleAPIService {
             return access_token;
 
         } catch (Exception e){
-            throw new MyException("Google Oauth API Error",401,e.initCause(e.getCause()));
+            throw new MyException(ExceptionCode.OAuthAPIException,e.initCause(e.getCause()));
         }
     }
 
@@ -104,7 +105,7 @@ public class GoogleAPIService {
             return response.getBody();
 
         } catch (Exception e){
-            throw new MyException("Google Sheet API Error",402,e.initCause(e.getCause()));
+            throw new MyException(ExceptionCode.SheetAPIException,e.initCause(e.getCause()));
         }
     }
 }

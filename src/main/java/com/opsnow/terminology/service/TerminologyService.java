@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.opsnow.terminology.model.Terminology;
 import com.opsnow.terminology.repository.TerminologyRepository;
+import com.opsnow.terminology.util.ExceptionCode;
 import com.opsnow.terminology.util.MyException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,8 @@ import java.util.List;
 
 @Service
 @Slf4j
-@PropertySource("classpath:application-${spring.profiles.active}.properties") // 프로퍼티 파일 경로 지정
-//@PropertySource("classpath:application-loc.properties")
+//@PropertySource("classpath:application-${spring.profiles.active}.properties") // 프로퍼티 파일 경로 지정
+@PropertySource("classpath:application-loc.properties")
 public class TerminologyService {
 
     @Autowired
@@ -44,7 +45,7 @@ public class TerminologyService {
             return jsonArray;
 
         } catch (Exception e){
-            throw new MyException("Data Parsing Error",501,e.initCause(e.getCause()));
+            throw new MyException(ExceptionCode.ParsingDataException, e.initCause(e.getCause()));
         }
     }
 
@@ -117,7 +118,7 @@ public class TerminologyService {
             return resultList;
 
         } catch (Exception e){
-            throw new MyException("Data Mapping Error",502,e.initCause(e.getCause()));
+            throw new MyException(ExceptionCode.MappingDataException,e.initCause(e.getCause()));
         }
     }
 
@@ -142,7 +143,7 @@ public class TerminologyService {
 
         } catch (Exception  e){
             e.printStackTrace();
-            throw new MyException("Save Data Error",503,e.getCause());
+            throw new MyException(ExceptionCode.SaveDataException,e.getCause());
         }
     }
 
@@ -163,7 +164,8 @@ public class TerminologyService {
             log.info("end {}",Thread.currentThread().getStackTrace()[1].getMethodName());
 
         } catch (Exception  e){
-            throw new MyException("Procedure Call Error",504,e.getCause());
+
+            throw new MyException(ExceptionCode.CallProcedureException,e.getCause());
         }
 
     }
