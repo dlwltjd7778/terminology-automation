@@ -12,9 +12,9 @@ public class MyException extends Exception{
 //        error_code = code;
 //    }
 
-    public MyException(ExceptionCode exceptionCode, Throwable throwable) {
-        super(exceptionCode.getMsg(),throwable);
-        error_code = exceptionCode.getCode();
+    public MyException(ResultCode resultCode, Throwable throwable) {
+        super(resultCode.getMsg(),throwable);
+        error_code = resultCode.getCode();
     }
 }
 

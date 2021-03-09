@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.opsnow.terminology.model.Terminology;
 import com.opsnow.terminology.repository.TerminologyRepository;
-import com.opsnow.terminology.util.ExceptionCode;
+import com.opsnow.terminology.util.ResultCode;
 import com.opsnow.terminology.util.MyException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class TerminologyService {
             return jsonArray;
 
         } catch (Exception e){
-            throw new MyException(ExceptionCode.ParsingDataException, e.initCause(e.getCause()));
+            throw new MyException(ResultCode.ParsingDataException, e.initCause(e.getCause()));
         }
     }
 
@@ -118,7 +118,7 @@ public class TerminologyService {
             return resultList;
 
         } catch (Exception e){
-            throw new MyException(ExceptionCode.MappingDataException,e.initCause(e.getCause()));
+            throw new MyException(ResultCode.MappingDataException,e.initCause(e.getCause()));
         }
     }
 
@@ -143,7 +143,7 @@ public class TerminologyService {
 
         } catch (Exception  e){
             e.printStackTrace();
-            throw new MyException(ExceptionCode.SaveDataException,e.getCause());
+            throw new MyException(ResultCode.SaveDataException,e.getCause());
         }
     }
 
@@ -165,7 +165,7 @@ public class TerminologyService {
 
         } catch (Exception  e){
 
-            throw new MyException(ExceptionCode.CallProcedureException,e.getCause());
+            throw new MyException(ResultCode.CallProcedureException,e.getCause());
         }
 
     }

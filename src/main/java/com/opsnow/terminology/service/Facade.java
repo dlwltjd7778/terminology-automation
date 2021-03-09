@@ -1,19 +1,22 @@
 package com.opsnow.terminology.service;
 
+import com.google.common.base.Stopwatch;
 import com.google.gson.JsonArray;
 import com.opsnow.terminology.model.OauthParameter;
 import com.opsnow.terminology.model.Parameter;
 import com.opsnow.terminology.model.SheetParameter;
 import com.opsnow.terminology.model.Terminology;
 import com.opsnow.terminology.util.MyException;
+import com.opsnow.terminology.util.ResultCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StopWatch;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
@@ -31,6 +34,8 @@ public class Facade {
         desc :         코드와 메세지를 리턴하는 Facade
     */
     public Map<String, Object> facade(Parameter parameter) {
+
+        final Stopwatch stopwatch = Stopwatch.createStarted();
 
         log.info("{} start", Thread.currentThread().getStackTrace()[1].getMethodName());
         Map<String, Object> result = new HashMap<>();
@@ -57,10 +62,10 @@ public class Facade {
             // 5. 프로시저 실행
             terminologyService.callProcedure();
 
-            result.put("code", 200);
-            result.put("msg", "success");
+            result.put("code", ResultCode.Success.getCode());
+            result.put("msg", ResultCode.Success.getMsg());
 
-            log.info("{} end", Thread.currentThread().getStackTrace()[1].getMethodName());
+            log.info("{} end : {}ms", Thread.currentThread().getStackTrace()[1].getMethodName(), stopwatch.stop().elapsed(TimeUnit.MILLISECONDS));
 
         } catch (MyException e){
             log.info("",e);
