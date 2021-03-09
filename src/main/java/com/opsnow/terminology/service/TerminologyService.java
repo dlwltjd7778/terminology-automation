@@ -17,8 +17,8 @@ import java.util.List;
 
 @Service
 @Slf4j
-//@PropertySource("classpath:application-${spring.profiles.active}.properties") // 프로퍼티 파일 경로 지정
-@PropertySource("classpath:application-loc.properties")
+@PropertySource("classpath:application-${spring.profiles.active}.properties") // 프로퍼티 파일 경로 지정
+//@PropertySource("classpath:application-loc.properties")
 public class TerminologyService {
 
     @Autowired
