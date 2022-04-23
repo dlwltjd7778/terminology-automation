@@ -33,5 +33,4 @@ build/
 .vscode/
 
 ### other ###
-*.properties
 .DS_Store
