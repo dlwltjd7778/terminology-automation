@@ -1,11 +1,11 @@
-package com.opsnow.terminology;
+package com.test.terminology;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.opsnow.terminology.model.Parameter;
-import com.opsnow.terminology.service.Facade;
+import com.test.terminology.model.Parameter;
+import com.test.terminology.service.Facade;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

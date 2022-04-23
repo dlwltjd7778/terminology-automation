@@ -1,4 +1,4 @@
-package com.opsnow.terminology.model;
+package com.test.terminology.model;
 
 import lombok.Getter;
 import lombok.Setter;

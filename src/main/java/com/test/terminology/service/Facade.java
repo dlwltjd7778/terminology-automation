@@ -1,17 +1,16 @@
-package com.opsnow.terminology.service;
+package com.test.terminology.service;
 
 import com.google.common.base.Stopwatch;
 import com.google.gson.JsonArray;
-import com.opsnow.terminology.model.OauthParameter;
-import com.opsnow.terminology.model.Parameter;
-import com.opsnow.terminology.model.SheetParameter;
-import com.opsnow.terminology.model.Terminology;
-import com.opsnow.terminology.util.MyException;
-import com.opsnow.terminology.util.ResultCode;
+import com.test.terminology.model.OauthParameter;
+import com.test.terminology.model.Parameter;
+import com.test.terminology.model.SheetParameter;
+import com.test.terminology.model.Terminology;
+import com.test.terminology.util.MyException;
+import com.test.terminology.util.ResultCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StopWatch;
 
 import java.util.HashMap;
 import java.util.List;

@@ -33,4 +33,8 @@ build/
 .vscode/
 
 ### db 정보 ###
-*.properties
+application-chn.properties
+application-dev.properties
+application-dqa.properties
+application-prd.properties
+application-sec-prod.properties

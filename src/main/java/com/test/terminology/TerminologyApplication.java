@@ -1,4 +1,4 @@
-package com.opsnow.terminology;
+package com.test.terminology;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

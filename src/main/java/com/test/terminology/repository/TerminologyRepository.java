@@ -1,6 +1,6 @@
-package com.opsnow.terminology.repository;
+package com.test.terminology.repository;
 
-import com.opsnow.terminology.model.Terminology;
+import com.test.terminology.model.Terminology;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

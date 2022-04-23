@@ -1,4 +1,4 @@
-package com.opsnow.terminology.util;
+package com.test.terminology.util;
 
 import lombok.Getter;
 
