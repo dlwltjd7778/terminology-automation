@@ -1,4 +1,4 @@
-package com.test.terminology.model;
+package com.work.terminology.model;
 
 import lombok.Getter;
 import lombok.Setter;

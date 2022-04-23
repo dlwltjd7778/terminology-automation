@@ -1,13 +1,13 @@
-package com.test.terminology.service;
+package com.work.terminology.service;
 
 import com.google.common.base.Stopwatch;
 import com.google.gson.JsonArray;
-import com.test.terminology.model.OauthParameter;
-import com.test.terminology.model.Parameter;
-import com.test.terminology.model.SheetParameter;
-import com.test.terminology.model.Terminology;
-import com.test.terminology.util.MyException;
-import com.test.terminology.util.ResultCode;
+import com.work.terminology.model.OauthParameter;
+import com.work.terminology.model.Parameter;
+import com.work.terminology.model.SheetParameter;
+import com.work.terminology.model.Terminology;
+import com.work.terminology.util.MyException;
+import com.work.terminology.util.ResultCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

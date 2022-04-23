@@ -1,12 +1,12 @@
-package com.test.terminology.service;
+package com.work.terminology.service;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.test.terminology.model.Terminology;
-import com.test.terminology.repository.TerminologyRepository;
-import com.test.terminology.util.ResultCode;
-import com.test.terminology.util.MyException;
+import com.work.terminology.model.Terminology;
+import com.work.terminology.repository.TerminologyRepository;
+import com.work.terminology.util.ResultCode;
+import com.work.terminology.util.MyException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;

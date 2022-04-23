@@ -1,8 +1,8 @@
-package com.test.terminology.controller;
+package com.work.terminology.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.test.terminology.model.Parameter;
-import com.test.terminology.service.Facade;
+import com.work.terminology.model.Parameter;
+import com.work.terminology.service.Facade;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

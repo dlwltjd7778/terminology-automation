@@ -1,4 +1,4 @@
-package com.test.terminology;
+package com.work.terminology;
 
 //import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

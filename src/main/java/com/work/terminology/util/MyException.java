@@ -1,4 +1,4 @@
-package com.test.terminology.util;
+package com.work.terminology.util;
 
 import lombok.Getter;
 

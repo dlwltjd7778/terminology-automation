@@ -1,10 +1,10 @@
-package com.test.terminology.service;
+package com.work.terminology.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.test.terminology.model.OauthParameter;
-import com.test.terminology.model.SheetParameter;
-import com.test.terminology.util.ResultCode;
-import com.test.terminology.util.MyException;
+import com.work.terminology.model.OauthParameter;
+import com.work.terminology.model.SheetParameter;
+import com.work.terminology.util.ResultCode;
+import com.work.terminology.util.MyException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;

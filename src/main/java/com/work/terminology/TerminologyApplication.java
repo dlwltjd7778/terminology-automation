@@ -1,4 +1,4 @@
-package com.test.terminology;
+package com.work.terminology;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,6 +1,6 @@
-package com.test.terminology.repository;
+package com.work.terminology.repository;
 
-import com.test.terminology.model.Terminology;
+import com.work.terminology.model.Terminology;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

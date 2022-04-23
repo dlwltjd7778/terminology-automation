@@ -1,11 +1,11 @@
-package com.test.terminology;
+package com.work.terminology;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.test.terminology.model.Parameter;
-import com.test.terminology.service.Facade;
+import com.work.terminology.model.Parameter;
+import com.work.terminology.service.Facade;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
